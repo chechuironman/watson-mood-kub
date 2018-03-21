@@ -1,64 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: service-chechu-watson
+  name: service-watson-3
   labels:
-    app: service-chechu-watson
+    app: service-watson-3
 spec:
   ports:
     - port: 80
       targetPort: 3000
   selector:
-    app: deployment-chechu-watson
+    app: deployment-watson-3
   type: NodePort
----
-apiVersion: extensions/v1beta1
-kind: Deployment
-metadata:
-  labels:
-    app: deployment-chechu-watson
-  name: deployment-chechu-watson
-spec:
-  replicas: 1
-  template:
-    metadata:
-      labels:
-        app: deployment-chechu-watson
-    spec:
-      containers:
-      - image: mycluster.icp:8500/default/watson-mood-kub
-        name: watson-chechu-watson
-        env:
-        - name: PROJECT_ID
-          valueFrom:
-            secretKeyRef:
-              key: projectId
-              name: object-storage
-        - name: USER_ID
-          valueFrom:          
-            secretKeyRef:
-              key: userId
-              name: object-storage
-        - name: OS_PASSWD
-          valueFrom:
-            secretKeyRef:
-              key: password
-              name: object-storage
-        - name: WATSON_USERNAME
-          valueFrom:
-            secretKeyRef:
-              key: user_id
-              name: tone-analyzer
-        - name: WATSON_PASSWD
-          valueFrom:
-            secretKeyRef:
-              key: passwd
-              name: tone-analyzer
-        - name: WATSON_VERSION
-          valueFrom:
-            secretKeyRef:
-              key: version
-              name: tone-analyzer
-        ports:
-        - containerPort: 3000
-          protocol: TCP
+

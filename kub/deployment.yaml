@@ -1,0 +1,31 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: deployment-watson-3
+  name: deployment-watson-3
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: deployment-watson-3
+    spec:
+      containers:
+      - image: mycluster.icp:8500/voicemail/watson-tone-analyzer-33
+        name: watson-chechu-watson-3
+        env:
+        - name: OBJECT_STORAGE
+          valueFrom:
+            secretKeyRef:
+              key: binding
+              name: object-storage2
+        - name: WATSON
+          valueFrom:          
+            secretKeyRef:
+              key: binding
+              name: tone-analyzer
+        ports:
+        - containerPort: 3000
+          protocol: TCP
+

@@ -31,11 +31,16 @@ var TableHeaderColumn = ReactBsTable.TableHeaderColumn;
 
 var config = require('config');
 
+var object_storage = JSON.parse(process.env.OBJECT_STORAGE)
+console.log(object_storage);
 var credentials = {
-    projectId: process.env.PROJECT_ID,
-    userId: process.env.USER_ID,
-    password: process.env.OS_PASSWD,
-    region: ObjectStorage.Region.LONDON
+    projectId: object_storage.projectId,
+    userId: object_storage.userId,
+    password: object_storage.password,
+    // projectId:"3318da003cc34ec18229d3bb79e29572",
+    // userId: "740b1e44a30d4e289632ae08bc05255e",
+    // password:"JM8~eghIZ8}Gm3u5",
+    region: ObjectStorage.Region.DALLAS
 };
 var objstorage = new ObjectStorage(credentials);
 
@@ -45,13 +50,19 @@ var objstorage = new ObjectStorage(credentials);
 require('./config/express')(app);
 
 // Create the service wrapper
+var watson = JSON.parse(process.env.WATSON)
+console.log(watson);
 var toneAnalyzer = new ToneAnalyzerV3({
   // If unspecified here, the TONE_ANALYZER_USERNAME and TONE_ANALYZER_PASSWORD environment properties will be checked
   // After that, the SDK will fall back to the bluemix-provided VCAP_SERVICES environment property
-  username: process.env.WATSON_USERNAME,
-  password: process.env.WATSON_PASSWD,
-  version_date: process.env.WATSON_VERSION
+  username: watson.username,
+  password: watson.password,
+  // username: "aed3618c-bc69-44af-9033-04ee4d65d397",
+  // password:"HIq4HGDRnCZ4",
+  version_date: '2017-09-21'
 });
+
+
 
 app.get('/', function(req, res) {
   res.render('index', {
@@ -69,12 +80,12 @@ app.post('/api/tone', function(req, res, next) {
 });
 
 app.get('/data1', function(req, res, next) {
-  objstorage.listContainers()
-    .then(function(containerList) {
-      containerList.forEach(function(container) {
-        // console.log(container.name);
-        var containerName = container.name;
-        objstorage.getContainer(container.name)
+  // objstorage.listContainers()
+  //   .then(function(containerList) {
+  //     containerList.forEach(function(container) {
+  //       console.log(container.name);
+  //       var containerName = container.name;
+        objstorage.getContainer('111')
           .then(function(container1) {
             // console.log(container1);
             container1.listObjects()
@@ -85,7 +96,7 @@ app.get('/data1', function(req, res, next) {
                  objectList.forEach(function(file){
                     // console.log('bu');
                     // console.log({'mailbox': container.name, 'name': file.name});
-                    data.push({'mailbox': container.name, 'name': file.name});
+                    data.push({'mailbox': '111' ,'name': file.name});
                   });
                   console.log(JSON.stringify(data));
                   return res.json(data);
@@ -100,16 +111,28 @@ app.get('/data1', function(req, res, next) {
         // console.log(containerName);
   });
       // console.log(containerList)
-    })
-    .catch(function(err) {
-    });
+//     })
+//     .catch(function(err) {
+//     });
+  
+// });
+
+app.post('/test', function(req, res, next) {
+  // name = req.body;
+  //console.log('body is ',req.body.name);
+  request('http://158.176.75.27:30293/api/v1/mailboxes', { json: true }, (err, res, body) => {
+  if (err) { return console.log(err); }
+  console.log(body.url);
+  console.log(body.explanation);
+});
+  
   
 });
 app.post('/metadata1', function(req, res, next) {
   // name = req.body;
   console.log('body is ',req.body.name);
       var objstorage = new ObjectStorage(credentials);
-      objstorage.getContainer('test')
+      objstorage.getContainer('111')
         .then(function(container) {
           // console.log(container);
           container.getObject(req.body.name)
