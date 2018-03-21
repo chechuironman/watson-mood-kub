@@ -37,9 +37,6 @@ var credentials = {
     projectId: object_storage.projectId,
     userId: object_storage.userId,
     password: object_storage.password,
-    // projectId:"3318da003cc34ec18229d3bb79e29572",
-    // userId: "740b1e44a30d4e289632ae08bc05255e",
-    // password:"JM8~eghIZ8}Gm3u5",
     region: ObjectStorage.Region.DALLAS
 };
 var objstorage = new ObjectStorage(credentials);
@@ -57,8 +54,6 @@ var toneAnalyzer = new ToneAnalyzerV3({
   // After that, the SDK will fall back to the bluemix-provided VCAP_SERVICES environment property
   username: watson.username,
   password: watson.password,
-  // username: "aed3618c-bc69-44af-9033-04ee4d65d397",
-  // password:"HIq4HGDRnCZ4",
   version_date: '2017-09-21'
 });
 
